@@ -13,19 +13,22 @@ def take_submission(subreddit: str, t_filter="day", ratio=0.85, score=3000, min_
     `t_filter`: Filter submissions by time.
     `ratio`: Up vote ratio of submission.
     `score`: Up votes minus down votes.
-    `min_num_comments`: Minimum number of comments must exists in a submission
+    `min_num_comments`: Minimum number of comments must exists in the submission
 
     ```python
     take_submission("askreddit")
     take_submission("askreddit", t_filter="now", ratio=0.90, score=5000, min_num_comments=5)
+    take_submission("askreddit", t_filter="day", ratio=0.85, score=0, min_num_comments=3)
     ```
+
+    To disable the `score` and `ratio` filters, simply set their values to 0.
     '''
 
     for submission in reddit.subreddit(subreddit).top(time_filter=t_filter):
         if submission.is_robot_indexable is False:
             continue
-        # if submission.media == 'Null':
-        #     continue
+        if not submission.media == 'Null':
+            continue
         if submission.num_comments < min_num_comments:
             continue
 
@@ -90,3 +93,5 @@ def take_comments(submission_id: str, sort_filter="best"):
 # Coqui TTS
 
 take_submission("askreddit", ratio=0.80)
+# take_submission("askscience", ratio=0.80, score=0)
+# take_submission("ProgrammerHumor", ratio=0.80, score=0)
