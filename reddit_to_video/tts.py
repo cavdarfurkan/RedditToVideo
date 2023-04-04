@@ -5,10 +5,11 @@ This is where text is converted to speech than saved.
 import os
 import random
 
+from pathlib import Path
 import pyttsx3 as tts
 
 
-PATH_TO_AUDIO: str = './tts_audio'
+PATH_TO_AUDIO: Path = Path('./tts_audio')
 
 
 engine = tts.init()
@@ -27,14 +28,14 @@ def save_audio(text: str, file_name: str) -> None:
     @type file_name: str
     '''
 
-    if not os.path.exists(PATH_TO_AUDIO):
+    if not PATH_TO_AUDIO.exists():
         try:
-            os.mkdir(PATH_TO_AUDIO)
+            PATH_TO_AUDIO.mkdir()
         except FileExistsError:
             print("File Exists Error")
 
     _set_random_voice()
-    engine.save_to_file(text, f'{PATH_TO_AUDIO}/temp_{file_name}.mp3')
+    engine.save_to_file(text, f"{PATH_TO_AUDIO}/temp_{file_name}.mp3")
     engine.runAndWait()
 
 
@@ -43,9 +44,8 @@ def delete_all_audios() -> None:
     Delete temp audio files in ./tts_audio directory.
     '''
     try:
-        for filename in os.listdir(PATH_TO_AUDIO):
-            if filename.startswith('temp_') and filename.endswith('.mp3'):
-                os.remove(PATH_TO_AUDIO + '/' + filename)
+        for file in PATH_TO_AUDIO.glob("temp_*.mp3"):
+            os.remove(file)
     except FileNotFoundError:
         print("File Not Found Error")
 
@@ -55,5 +55,3 @@ def _set_random_voice() -> None:
     Sets a random voice from voices list.
     '''
     engine.setProperty('voice', random.choice(vs).id)
-
-save_audio("as", 'asd')
