@@ -55,3 +55,14 @@ def _set_random_voice() -> None:
     Sets a random voice from voices list.
     '''
     engine.setProperty('voice', random.choice(vs).id)
+
+
+def est_audio_length(text: str) -> float:
+    '''
+    Estimate audio length by words count and speaker pace.
+    @param text: The text which its speak length to calculate.
+    @type text: str
+    '''
+    num_words = len(text.split())
+
+    return (num_words / engine.getProperty('rate')) * 60
