@@ -3,3 +3,4 @@ myenv
 praw.ini
 tts_audio/
 reddit_to_video/data
+__pycache__/
