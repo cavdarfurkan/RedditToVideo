@@ -47,7 +47,7 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
             video_length -= (est_audio_length(submission.title) +
                              PAUSE_DURATION)
             submission_models_list.append(SubmissionModel(
-                (submission.author, submission.title), take_comments(submission.id, video_length)))
+                submission.id, (submission.author, submission.title), take_comments(submission.id, video_length)))
 
     return submission_models_list
 
