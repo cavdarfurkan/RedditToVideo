@@ -3,8 +3,8 @@
 import itertools
 
 import praw
+from praw.models import MoreComments
 
-from tts import save_audio
 from tts import est_audio_length
 
 from models.submission_model import SubmissionModel
@@ -46,29 +46,15 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
             video_length: float = MAX_VIDEO_DURATION
             video_length -= (est_audio_length(submission.title) +
                              PAUSE_DURATION)
-            submission_models_list.append(SubmissionModel(
-                submission.id, (submission.author, submission.title), take_comments(submission.id, video_length)))
+            comments = __take_comments(submission.id, video_length)
+            if comments:
+                submission_models_list.append(SubmissionModel(
+                    submission.id, (submission.author, submission.title), comments))
 
     return submission_models_list
 
-# print(len(submissionsList))
-#     print(submission.author)
-#     print(submission.is_robot_indexable)
-#     print(submission.ups)
-#     print(submission.upvote_ratio)
-#     print(submission.score)
-#     print(submission.over_18)
-#     print(submission.num_comments)
-#     print(submission.media) -> 'None'
-#     print(submission.is_video) -> False
-#
-#     print(submission.subreddit_id)
-#     print(submission.id)
-#
-#     print(submission.title)
 
-
-def take_comments(submission_id: str, video_length: float, sort_filter: str = "top") -> list[tuple]:
+def __take_comments(submission_id: str, video_length: float, sort_filter: str = "top") -> list[tuple]:
     '''
     Get the top 10 comments from the selected submission.
 
@@ -84,13 +70,26 @@ def take_comments(submission_id: str, video_length: float, sort_filter: str = "t
 
     submission = reddit.submission(submission_id)
     submission.comment_sort = sort_filter
-    comments_list = list(submission.comments)
+    all_comments_list = submission.comments.list()
+    comments_list = []
+    for comment in all_comments_list:
+        if isinstance(comment, MoreComments):
+            continue
+        if comment.author is None:
+            # Comment is removed
+            continue
+        if comment.author.is_mod:
+            # Comment submitted by moderator. Including AutoModerator
+            continue
+        comments_list.append(comment)
+        if len(comments_list) >= 10:
+            break
 
     # Selecting the most optimal comments considering the video duration
     max_sum: float = 0
     max_tuple: tuple = tuple()
-    for i in range(3, 11):
-        for combination in itertools.combinations(comments_list[:10], i):
+    for i in range(3, 8):
+        for combination in itertools.combinations(comments_list, i):
             length_combination: tuple[float, ...] = tuple(
                 est_audio_length(comment.body) for comment in combination)
             current_sum: float = sum(length_combination)
@@ -100,17 +99,16 @@ def take_comments(submission_id: str, video_length: float, sort_filter: str = "t
                 max_sum = current_sum
                 max_tuple = combination
 
+    if not max_tuple:
+        for combination in itertools.combinations(comments_list, 2):
+            length_combination: tuple[float, ...] = tuple(
+                est_audio_length(comment.body) for comment in combination)
+            current_sum: float = sum(length_combination)
+            if current_sum > video_length:
+                continue
+            if (current_sum <= video_length - (2*PAUSE_DURATION)) and (current_sum > max_sum):
+                max_sum = current_sum
+                max_tuple = combination
+
     return list((comment.author, comment.body) for comment in max_tuple)
     # comment.id -> unique id for the comment
-
-
-x = take_submissions("askreddit", ratio=0.80, score=5000)
-for i in x:
-    print(f"Submission Author: {i.title[0].name}")
-    print(f"Submission Title: {i.title[1]}")
-    for k in i.comments:
-        print(f"Comment Author: {k[0].name}")
-        print(f"Comment: {k[1]}")
-    print()
-
-# Coqui TTS
