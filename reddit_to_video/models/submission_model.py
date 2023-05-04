@@ -1,5 +1,6 @@
 '''Model for creating submission objects.'''
 
+from typing import List
 from pathlib import Path
 
 
@@ -12,7 +13,7 @@ class SubmissionModel:
     @type comments: list[str]
     '''
 
-    def __init__(self, submission_id: str, comments: list[str]) -> None:
+    def __init__(self, submission_id: str, comments: List[str]) -> None:
         self.submission_id = submission_id
         self.comments = comments
         # self.generate_assets()

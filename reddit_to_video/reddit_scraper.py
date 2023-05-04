@@ -1,5 +1,7 @@
 '''Take subreddits'''
 
+
+from typing import List
 from itertools import combinations
 
 import praw
@@ -22,7 +24,7 @@ PAUSE_DURATION: float = 0.5
 # import pprint
 # pprint.pprint(vars(sub))
 
-def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min_num_comments=10) -> list[SubmissionModel]:
+def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min_num_comments=10) -> List[SubmissionModel]:
     '''
     Get the top submissions of the day.
 
@@ -41,7 +43,7 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
     To disable the `score` and `ratio` filters, simply set their values to 0.
     '''
 
-    submission_models_list: list[SubmissionModel] = []
+    submission_models_list: List[SubmissionModel] = []
 
     for submission in reddit.subreddit(subreddit).top(time_filter=t_filter):
         if submission.is_robot_indexable is False:
@@ -64,7 +66,7 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
     return submission_models_list
 
 
-def __take_comments(submission_id: str, video_length: float, sort_filter: str = "top") -> list[str]:
+def __take_comments(submission_id: str, video_length: float, sort_filter: str = "top") -> List[str]:
     '''
     Get the top 10 comments from the selected submission.
 
@@ -81,7 +83,7 @@ def __take_comments(submission_id: str, video_length: float, sort_filter: str = 
     submission = reddit.submission(submission_id)
     submission.comment_sort = sort_filter
     all_comments_list = submission.comments.list()
-    comments_list: list[tuple] = []
+    comments_list: List[tuple] = []
     for comment in all_comments_list:
         if isinstance(comment, MoreComments):
             continue

@@ -4,7 +4,7 @@
 from reddit_scraper import take_submissions
 import image_scraper
 
-submissions = take_submissions("askreddit", ratio=0, score=3000)
+submissions = take_submissions("askreddit", ratio=0, score=1500)
 
 for sub in submissions:
     image_scraper.take_screenshot(sub)
