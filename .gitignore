@@ -1,6 +1,6 @@
 .vscode
 myenv
 praw.ini
-tts_audio/
+temp_assets/
 reddit_to_video/data
 __pycache__/

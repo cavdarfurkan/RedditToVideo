@@ -1,8 +1,6 @@
-# Youtube Shorts & Tiktok Video Maker Bot
+# Reddit to Video Bot
 
 ## Praw
-
----
 
 *praw.ini* is required at the root directory of the project.
 
@@ -13,3 +11,20 @@ Example:
 client_id=yourClientId
 client_secret=yourSecretId
 ```
+
+---
+
+## Coqui
+
+~/.local/share/tts has the tts models
+
+---
+
+## Playwright
+To install browsers
+
+```
+playwright install
+```
+
+---
