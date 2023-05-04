@@ -1,68 +1,90 @@
 '''
-This is where text is converted to speech than saved.
+This is where text is converted to speech then saved.
 '''
 
 import os
-import random
-
+import site
 from pathlib import Path
-import pyttsx3 as tts
+
+from TTS.utils.manage import ModelManager
+from TTS.utils.synthesizer import Synthesizer
+
+import soundfile
+
+PATH_TO_ASSETS: Path = Path('./temp_assets')
+
+SITE_LOCATION = site.getsitepackages()[0]
+TTS_PATH = SITE_LOCATION+"/TTS/.models.json"
+
+model_manager = ModelManager(TTS_PATH)
+model_path, config_path, model_item = model_manager.download_model(
+    "tts_models/en/ljspeech/glow-tts")
+# model_path, config_path, model_item = model_manager.download_model("tts_models/en/ljspeech/tacotron2-DDC")
+voc_path, voc_config_path, _ = model_manager.download_model(
+    model_item["default_vocoder"])
+
+synthesizer = Synthesizer(
+    tts_checkpoint=model_path,
+    tts_config_path=config_path,
+    vocoder_checkpoint=voc_path,
+    vocoder_config=voc_config_path
+)
 
 
-PATH_TO_AUDIO: Path = Path('./tts_audio')
-
-
-engine = tts.init()
-engine.setProperty('rate', 150)
-vs = engine.getProperty('voices')
-
-
-def save_audio(text: str, file_name: str) -> None:
+def save_audio(text: str, subdir: str, file_name: str) -> None:
     '''
-    Save the text as audio to the ./tts_audio directory.
+    Save the text as .wav audio.
 
     @param text: Text to save as audio
     @type text: str
 
-    @param file_name: File name after the temp_ prefix and before the .mp3 suffix
+    @param subdir: Subdir name. Usually it's same as submission id. /temp_assets/{subdir}
+    @type subdir: str
+
+    @param file_name: File name.wav
     @type file_name: str
     '''
 
-    if not PATH_TO_AUDIO.exists():
-        try:
-            PATH_TO_AUDIO.mkdir()
-        except FileExistsError:
-            print("File Exists Error")
+    path: Path = PATH_TO_ASSETS.joinpath(subdir)
 
-    _set_random_voice()
-    engine.save_to_file(text, f"{PATH_TO_AUDIO}/temp_{file_name}.mp3")
-    engine.runAndWait()
-
-
-def delete_all_audios() -> None:
-    '''
-    Delete temp audio files in ./tts_audio directory.
-    '''
     try:
-        for file in PATH_TO_AUDIO.glob("temp_*.mp3"):
-            os.remove(file)
+        path.mkdir(parents=True)
+    except FileExistsError:
+        print("File Exists Error")
+
+    outputs = synthesizer.tts(text)
+    synthesizer.save_wav(outputs, f'{path}/{file_name}.wav')
+
+
+def delete_audio(subdir: str, audio_file: str) -> None:
+    '''
+    Delete audio /temp_assets/{subdir}/{file_name}.wav
+
+    @param subdir: Path of subdir. Usually it's same as submisison id.
+    @type subdir: str
+
+    @param audio_file: Path of the audio file.
+    @type audio_file: str
+    '''
+
+    try:
+        path: Path = PATH_TO_ASSETS.joinpath(
+            subdir).joinpath(f'{audio_file}.wav')
+        os.remove(path)
     except FileNotFoundError:
         print("File Not Found Error")
 
 
-def _set_random_voice() -> None:
+def audio_length(subdir: str, audio_file: str) -> float:
     '''
-    Sets a random voice from voices list.
-    '''
-    engine.setProperty('voice', random.choice(vs).id)
+    Audio length of the saved audio asset.
 
+    @param subdir: Path of subdir. Usually it's same as submisison id.
+    @type subdir: str
 
-def est_audio_length(text: str) -> float:
+    @param audio_file: Path of the audio file.
+    @type audio_file: str
     '''
-    Estimate audio length by words count and speaker pace.
-    @param text: The text which its speak length to calculate.
-    @type text: str
-    '''
-    num_words = len(text.split())
 
-    return (num_words / engine.getProperty('rate')) * 60
+    path: Path = PATH_TO_ASSETS.joinpath(subdir).joinpath(f'{audio_file}.wav')
+    return soundfile.info(path).duration
