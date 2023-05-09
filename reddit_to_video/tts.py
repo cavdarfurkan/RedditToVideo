@@ -31,7 +31,7 @@ synthesizer = Synthesizer(
 )
 
 
-def save_audio(text: str, subdir: str, file_name: str) -> None:
+def save_audio(text: str, subdir: str, file_name: str) -> bool:
     '''
     Save the text as .wav audio.
 
@@ -46,14 +46,22 @@ def save_audio(text: str, subdir: str, file_name: str) -> None:
     '''
 
     path: Path = PATH_TO_ASSETS.joinpath(subdir)
+    is_saved: bool = False
 
     try:
         path.mkdir(parents=True)
     except FileExistsError:
         print("File Exists Error")
 
-    outputs = synthesizer.tts(text)
-    synthesizer.save_wav(outputs, f'{path}/{file_name}.wav')
+    try:
+        outputs = synthesizer.tts(text)
+        synthesizer.save_wav(outputs, f'{path}/{file_name}.wav')
+        is_saved = True
+    except Exception:
+        is_saved = False
+        print('Synthesizer failed.')
+
+    return is_saved
 
 
 def delete_audio(subdir: str, audio_file: str) -> None:

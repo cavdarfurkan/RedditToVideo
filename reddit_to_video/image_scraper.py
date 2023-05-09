@@ -35,7 +35,7 @@ def take_screenshot(model: SubmissionModel) -> None:
         page.goto(TITLE_URL.format(model.submission_id))
         title_element = page.locator(f"#t3_{model.submission_id}")
         title_element.screenshot(path=f'{path}/title.png')
-        reduce_transparency(path, 'title.png')
+        __reduce_transparency(path, 'title.png')
 
         # Take screenshot of each comment.
         for comment_id in model.comments:
@@ -56,14 +56,14 @@ def take_screenshot(model: SubmissionModel) -> None:
                 }
                 page.screenshot(
                     path=f'{path}/{comment_id}.png', clip=combined_box)
-                reduce_transparency(path, f'{comment_id}.png')
+                __reduce_transparency(path, f'{comment_id}.png')
             else:
                 print("One or more elements not found on page.")
 
         browser.close()
 
 
-def reduce_transparency(path: Path, img_name: str) -> None:
+def __reduce_transparency(path: Path, img_name: str) -> None:
     '''
     Reduce the transparency of the the image to 80%
 
@@ -74,7 +74,7 @@ def reduce_transparency(path: Path, img_name: str) -> None:
     @type img_name: str
     '''
 
-    alpha = 204  # 80% transparency
+    # alpha = 204  # 80% transparency
     alpha = 230  # 90% transparency
 
     img = Image.open(f'{path}/{img_name}')

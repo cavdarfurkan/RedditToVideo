@@ -94,11 +94,14 @@ def __take_comments(submission_id: str, video_length: float, sort_filter: str = 
             # Comment submitted by moderator. Including AutoModerator
             continue
         file_name = f'{submission_id}_{comment.id}'
-        tts.save_audio(comment.body, submission_id, file_name)
-        duration: float = tts.audio_length(submission_id, file_name)
-        comments_list.append((comment.body, file_name, duration, comment.id))
-        if len(comments_list) >= 10:
-            break
+
+        is_saved: bool = tts.save_audio(comment.body, submission_id, file_name)
+        if is_saved:
+            duration: float = tts.audio_length(submission_id, file_name)
+            comments_list.append(
+                (comment.body, file_name, duration, comment.id))
+            if len(comments_list) >= 10:
+                break
 
     # Selecting the most optimal comments considering the video duration
     max_sum: float = 0
