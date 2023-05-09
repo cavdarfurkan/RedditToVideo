@@ -1,32 +1,35 @@
 '''Main Script'''
 
+import shutil
+import os
 
 from reddit_scraper import take_submissions
-import image_scraper
+from image_scraper import take_screenshot
+from video_generator import generate_video
 
-submissions = take_submissions("askreddit", ratio=0, score=1500)
+TEMP_ASSETS_PATH = './temp_assets'
+OUTPUTS_PATH = './outputs'
+
+delete_temp_assets = True
+delete_outputs = False
+
+# Create necessary directories
+if not os.path.exists(OUTPUTS_PATH):
+    print(f'Make dir {OUTPUTS_PATH}')
+    os.makedirs(OUTPUTS_PATH)
+
+
+submissions = take_submissions("askreddit", ratio=0, score=3000)
 
 for sub in submissions:
-    image_scraper.take_screenshot(sub)
+    take_screenshot(sub)
 
-# if submissions:
-#     # List is not empty
-#     for submission in submissions:
-#         tts.save_audio(submission.title[1], 'title')
-#         for comment in submission.comments:
-#             tts.save_audio(comment[1], comment[0])
-# else:
-#     # List is empty
-#     pass
+for sub in submissions:
+    generate_video(sub)
 
-# if submissions:
-#     print("list is not empty")
-#     for x in submissions:
-#         print(x.title[1])
-#         print(len(x.comments))
-#         for c in x.comments:
-#             print(f"-----{c[0]}-----")
-#             print(c[1])
-#             print("----------")
-# if not submissions:
-#     print("list is empty")
+
+if delete_temp_assets:
+    shutil.rmtree(TEMP_ASSETS_PATH)
+
+if delete_outputs:
+    shutil.rmtree(OUTPUTS_PATH)
