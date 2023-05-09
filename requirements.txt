@@ -3,3 +3,4 @@ TTS
 pysondb
 Pillow
 pytest-playwright
+moviepy
