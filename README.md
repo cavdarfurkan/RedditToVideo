@@ -1,5 +1,7 @@
 # Reddit to Video Bot
 
+You can download the background videos from the releases.
+
 ## Praw
 
 *praw.ini* is required at the root directory of the project.
@@ -21,6 +23,7 @@ client_secret=yourSecretId
 ---
 
 ## Playwright
+
 To install browsers
 
 ```
