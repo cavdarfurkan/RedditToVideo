@@ -1,6 +1,24 @@
 # Reddit to Video Bot
 
-You can download the background videos from the releases.
+> You can download the background videos from the releases.
+
+Run the below command where makefile is located to build in a venv.
+
+```
+make
+```
+
+Run the below command where makefile is located to build in a venv and then run.
+
+```
+make run
+```
+
+You wil be asked to enter credentials for 'praw.ini'.
+
+If make is succesfully completed, you can skip the steps below.
+
+---
 
 ## Praw
 
@@ -12,6 +30,7 @@ Example:
 [bot1]
 client_id=yourClientId
 client_secret=yourSecretId
+user_agent=userAgentName
 ```
 
 ---
