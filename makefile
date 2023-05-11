@@ -10,7 +10,7 @@ ${VENV}/bin/activate: requirements.txt
 	./${PIP} install -r requirements.txt
 	${BROWSER} install
 
-praw.ini: ${VENV}/bin/activate
+praw.ini:
 	@echo "Enter your Reddit API credentials:"; \
 	read -p "Client ID: " client_id; \
 	read -p "Client secret: " client_secret; \
@@ -19,12 +19,11 @@ praw.ini: ${VENV}/bin/activate
 	echo "client_id=$$client_id" >> praw.ini; \
 	echo "client_secret=$$client_secret" >> praw.ini; \
 	echo "user_agent=$$user_agent" >> praw.ini
-	
-run: praw.ini
-	./${PYTHON} reddit_to_video/main.py
+
+venv: ${VENV}/bin/activate
 	
 clean:
 	rm -rf ${VENV}
 	find . -type f -name '*.pyc' -delete
 	
-.PHONY: all run clean
+.PHONY: all clean

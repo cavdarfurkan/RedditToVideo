@@ -1,6 +1,26 @@
 [
-    "askreddit",
-    "askmen",
-    "askwomen",
-    "showerthoughts"
+    {
+        "name": "askreddit",
+        "time_filter": "day",
+        "ratio": "0",
+        "score": 200
+    },
+    {
+        "name": "askmen",
+        "time_filter": "day",
+        "ratio": "0",
+        "score": 200
+    },
+    {
+        "name": "askwomen",
+        "time_filter": "day",
+        "ratio": "0",
+        "score": 200
+    },
+    {
+        "name": "showerthoughts",
+        "time_filter": "day",
+        "ratio": "0",
+        "score": 200
+    }
 ]
