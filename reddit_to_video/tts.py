@@ -3,35 +3,21 @@ This is where text is converted to speech then saved.
 '''
 
 import os
-import site
 from pathlib import Path
+from random import choice
 
-from TTS.utils.manage import ModelManager
-from TTS.utils.synthesizer import Synthesizer
-
+import edge_tts
 import soundfile
+
 
 PATH_TO_ASSETS: Path = Path('./temp_assets')
 
-SITE_LOCATION = site.getsitepackages()[0]
-TTS_PATH = SITE_LOCATION+"/TTS/.models.json"
 
-model_manager = ModelManager(TTS_PATH)
-model_path, config_path, model_item = model_manager.download_model(
-    "tts_models/en/ljspeech/glow-tts")
-# model_path, config_path, model_item = model_manager.download_model("tts_models/en/ljspeech/tacotron2-DDC")
-voc_path, voc_config_path, _ = model_manager.download_model(
-    model_item["default_vocoder"])
-
-synthesizer = Synthesizer(
-    tts_checkpoint=model_path,
-    tts_config_path=config_path,
-    vocoder_checkpoint=voc_path,
-    vocoder_config=voc_config_path
-)
+VOICES = ['en-US-AriaNeural', 'en-US-ChristopherNeural', 'en-US-EricNeural', 'en-US-GuyNeural',
+          'en-US-JennyNeural', 'en-US-MichelleNeural', 'en-US-RogerNeural', 'en-US-SteffanNeural']
 
 
-def save_audio(text: str, subdir: str, file_name: str) -> bool:
+async def save_audio(text: str, subdir: str, file_name: str) -> bool:
     '''
     Save the text as .wav audio.
 
@@ -54,8 +40,9 @@ def save_audio(text: str, subdir: str, file_name: str) -> bool:
         print("File Exists Error")
 
     try:
-        outputs = synthesizer.tts(text)
-        synthesizer.save_wav(outputs, f'{path}/{file_name}.wav')
+        # asyncio.run(tts_to_speech(text, str(path), file_name))
+        output = edge_tts.Communicate(text, choice(VOICES))
+        await output.save(f'{path}/{file_name}.wav')
         is_saved = True
     except Exception:
         is_saved = False

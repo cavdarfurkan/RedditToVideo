@@ -35,9 +35,9 @@ user_agent=userAgentName
 
 ---
 
-## Coqui
+## edge-tts
 
-~/.local/share/tts has the tts models
+
 
 ---
 

@@ -19,7 +19,7 @@ if not os.path.exists(OUTPUTS_PATH):
     os.makedirs(OUTPUTS_PATH)
 
 
-submissions = take_submissions("askreddit", ratio=0, score=3000)
+submissions = take_submissions("askreddit", ratio=0, score=200)
 
 for sub in submissions:
     take_screenshot(sub)

@@ -3,6 +3,7 @@
 
 from typing import List
 from itertools import combinations
+import asyncio
 
 import praw
 from praw.models import MoreComments
@@ -32,7 +33,7 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
     `t_filter`: Filter submissions by time.
     `ratio`: Up vote ratio of submission.
     `score`: Up votes minus down votes.
-    `min_num_comments`: Minimum number of comments must exists in the submission
+    `min_num_comments`: Minimum number of comments that must exists in the submission
 
     ```python
     take_submission("askreddit")
@@ -55,7 +56,8 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
 
         if (submission.upvote_ratio >= ratio and submission.score >= score):
             video_length: float = MAX_VIDEO_DURATION
-            tts.save_audio(submission.title, submission.id, 'title')
+            asyncio.run(tts.save_audio(
+                submission.title, submission.id, 'title'))
             video_length -= (tts.audio_length(submission.id,
                              'title') + PAUSE_DURATION)
             comments = __take_comments(submission.id, video_length)
@@ -95,7 +97,8 @@ def __take_comments(submission_id: str, video_length: float, sort_filter: str = 
             continue
         file_name = f'{submission_id}_{comment.id}'
 
-        is_saved: bool = tts.save_audio(comment.body, submission_id, file_name)
+        is_saved: bool = asyncio.run(tts.save_audio(
+            comment.body, submission_id, file_name))
         if is_saved:
             duration: float = tts.audio_length(submission_id, file_name)
             comments_list.append(

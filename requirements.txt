@@ -1,5 +1,6 @@
 praw
-TTS
+edge-tts
+soundfile
 pysondb
 Pillow
 pytest-playwright
