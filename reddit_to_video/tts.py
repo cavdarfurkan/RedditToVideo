@@ -40,10 +40,10 @@ async def save_audio(text: str, subdir: str, file_name: str) -> bool:
         print("File Exists Error")
 
     try:
-        # asyncio.run(tts_to_speech(text, str(path), file_name))
         output = edge_tts.Communicate(text, choice(VOICES))
         await output.save(f'{path}/{file_name}.wav')
         is_saved = True
+        print(f'{file_name}.wav saved')
     except Exception:
         is_saved = False
         print('Synthesizer failed.')
@@ -66,6 +66,7 @@ def delete_audio(subdir: str, audio_file: str) -> None:
         path: Path = PATH_TO_ASSETS.joinpath(
             subdir).joinpath(f'{audio_file}.wav')
         os.remove(path)
+        print(f'{audio_file}.wav removed')
     except FileNotFoundError:
         print("File Not Found Error")
 

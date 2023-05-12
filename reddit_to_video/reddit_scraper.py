@@ -82,6 +82,8 @@ def __take_comments(submission_id: str, video_length: float, sort_filter: str = 
     ```
     '''
 
+    print(f'Taking comments for {submission_id}')
+
     submission = reddit.submission(submission_id)
     submission.comment_sort = sort_filter
     all_comments_list = submission.comments.list()

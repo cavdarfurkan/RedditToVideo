@@ -1,12 +1,16 @@
 # Reddit to Video Bot
 
+## Build
+
+---
+
 > Run the command below where **makefile** is located to build the project.
 >
 > ```shell
 > make
 > ```
 >
-> If you run ```make``` sucessfully, then no need to do other steps.
+> If you run ```make``` sucessfully, then no need to do the other steps.
 
 > Run the command below where **makefile** is located to build the **venv** and install required dependencies.
 >
@@ -28,7 +32,7 @@
 > make clean
 > ```
 
-If ```make``` is succesfully completed, you can skip the steps below.
+If ```make``` is succesfully completed, you don't need to do anything else except background videos.
 
 ---
 
@@ -61,10 +65,16 @@ Or run '```make venv```' in the terminal.
 
 ---
 
+## Subreddits
+
+You can add, remove or change the configuration for subreddits from [subreddits.json](./data/subreddits.json)
+
+---
+
 ## Background Videos
 
 You can find and download the background videos from the releases or you can use your own custom videos.
 
-After downloading background videos, place them inside *background_videos* folder which is located at the root of the project.
+After downloading background videos, place them inside _background_videos_ folder which is located at the root of the project.
 
 Videos should be 60 seconds long as the script will collect texts up to 60 seconds. Or maximum video duration should also be changed from the script.
