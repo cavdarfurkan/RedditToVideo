@@ -3,28 +3,28 @@
         "name": "askreddit",
         "time_filter": "day",
         "ratio": 0,
-        "score": 10000,
+        "score": 2300,
         "min_comments": 10
     },
     {
         "name": "askmen",
         "time_filter": "week",
         "ratio": 0,
-        "score": 2000,
+        "score": 20000,
         "min_comments": 10
     },
     {
         "name": "askwomen",
         "time_filter": "week",
         "ratio": 0,
-        "score": 3000,
+        "score": 30000,
         "min_comments": 10
     },
     {
         "name": "showerthoughts",
         "time_filter": "week",
         "ratio": 0,
-        "score": 20000,
+        "score": 200000,
         "min_comments": 10
     }
 ]

@@ -24,17 +24,15 @@ with open(DATA_PATH.format(file='subreddits'), encoding='utf-8') as f:
     datas = json.load(f)
     for item in datas:
 
-        print(item['name'], 'Taking submissions')
+        print(f'Taking submissions: {item["name"]}')
 
         submissions = take_submissions(subreddit=item['name'], t_filter=item['time_filter'],
                                        ratio=item['ratio'], score=item['score'], min_num_comments=item['min_comments'])
 
         for sub in submissions:
-            print('Taking screenshot', sub.submission_id)
             take_screenshot(sub)
 
         for sub in submissions:
-            print('Generating video', sub.submission_id)
             generate_video(sub)
 
 

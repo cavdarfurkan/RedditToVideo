@@ -18,13 +18,6 @@ MAX_VIDEO_DURATION: float = 60
 PAUSE_DURATION: float = 0.5
 
 
-# for sub in reddit.subreddit("askreddit").top(time_filter="day"):
-#     print(sub)
-# sub = reddit.submission("133nvma")
-# print(sub.title)
-# import pprint
-# pprint.pprint(vars(sub))
-
 def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min_num_comments=10) -> List[SubmissionModel]:
     '''
     Get the top submissions of the day.
@@ -55,6 +48,7 @@ def take_submissions(subreddit: str, t_filter="day", ratio=0.85, score=3000, min
             continue
 
         if (submission.upvote_ratio >= ratio and submission.score >= score):
+            print(f'submission_id: {submission.id}')
             video_length: float = MAX_VIDEO_DURATION
             asyncio.run(tts.save_audio(
                 submission.title, submission.id, 'title'))
@@ -81,8 +75,6 @@ def __take_comments(submission_id: str, video_length: float, sort_filter: str = 
     take_comments("111aaa", 55, sort_filter="best")
     ```
     '''
-
-    print(f'Taking comments for {submission_id}')
 
     submission = reddit.submission(submission_id)
     submission.comment_sort = sort_filter

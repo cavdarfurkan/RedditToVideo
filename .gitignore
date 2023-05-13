@@ -1,8 +1,8 @@
 .vscode
 myenv
+venv
 praw.ini
 temp_assets/
-reddit_to_video/data
 __pycache__/
 background_videos/*.mp4
 outputs/

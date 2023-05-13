@@ -2,8 +2,6 @@
 
 ## Build
 
----
-
 > Run the command below where **makefile** is located to build the project.
 >
 > ```shell
@@ -32,9 +30,21 @@
 > make clean
 > ```
 
-If ```make``` is succesfully completed, you don't need to do anything else except background videos.
+If ```make``` is succesfully completed:
 
----
+* Make sure playwright browsers are installed.
+* Install ImageMagick. Required for watermark.
+* Edit the watermark text.
+* Add background videos.
+* Edit the configuration for subreddits.
+
+## Run
+
+Run from the project's root folder.
+
+```shell
+python reddit_to_video/main.py
+```
 
 ## Praw
 
@@ -51,8 +61,6 @@ client_secret=yourSecretId
 user_agent=userAgentName
 ```
 
----
-
 ## Playwright
 
 To install browsers run in the terminal.
@@ -63,13 +71,26 @@ playwright install
 
 Or run '```make venv```' in the terminal.
 
----
+## ImageMagick
+
+ImageMagick is required to be able to add watermark to videos.
+
+If you are getting security policy error, go to ```/etc/ImageMagick-6/policy.xml``` and comment out the following line:
+
+```<policy domain="path" rights="none" pattern="@*"/>```
+
+### Windows
+
+You can install it from the offical website.
+You may also need to set the path.
+
+### Linux
+
+You can install it with your package manager.
 
 ## Subreddits
 
 You can add, remove or change the configuration for subreddits from [subreddits.json](./data/subreddits.json)
-
----
 
 ## Background Videos
 
